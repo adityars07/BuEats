@@ -48,15 +48,27 @@ app.get('*', (req, res) => {
 });
 
 
-// Database Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/foodcampus')
-  .then(() => {
+// Handle database connection separately
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/foodcampus');
     console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  }
+};
+
+// Start server if running directly
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
+  connectDB().then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
-  })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
   });
+} else {
+  // On Vercel, connect to DB on every (or first) function invocation
+  connectDB();
+}
+
+export default app;
 
