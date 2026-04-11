@@ -10,6 +10,7 @@ import menuRoutes from './routes/menu.js';
 import reviewRoutes from './routes/reviews.js';
 import paymentRoutes from './routes/payment.js';
 import chatbotRoutes from './routes/chatbot.js';
+import complaintRoutes from './routes/complaints.js';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/complaints', complaintRoutes);
 
 // Serve frontend static files in production
 app.use(express.static(path.join(__dirname, 'public')));
@@ -44,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/foodcampus')
